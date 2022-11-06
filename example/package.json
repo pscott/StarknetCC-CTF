@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "starknet": "https://github.com/0xs34n/starknet.js#develop"
+  },
+  "type": "module"
+}
+
