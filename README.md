@@ -1,6 +1,5 @@
 # StarknetCC-CTF
-Write up of the [StarknetCC-CTF](https://starknet-cc.ctfd.io/) held in Lisbon on November 1st 2022.
-Teams of 6 max, 50% must be on-site.
+Write up of the [StarknetCC-CTF](https://starknet-cc.ctfd.io/) held in Lisbon on November 1st 2022!
 
 # Overview
 You can find all the information we were given on this [PDF](src/StarkNet-CC%20CTF.pdf).
