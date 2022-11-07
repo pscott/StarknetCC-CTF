@@ -157,6 +157,43 @@ Pro-tip: this bug is [supposed to have been fixed with cairo-lang 0.10.0](https:
 
 Only the Ledger chads solved it. We tried brute forcing it but didn't manage to bruteforce in time.
 
+*Courtesy of the Ledger Team*
+
+The dna attack consisted in inverting the function `pedersen(candidate, 317)=target`.
+
+As 317 is a constant, and all candidates being lower than 248 bits, the challenge could be reduced to compute
+g^x= target' which is a well known problem: the discrete logarithm problem (DLP). While intractable for large search space,
+the number of candidates was only 2^34 (4 candidates per step).
+
+At first glance the exhaustive search can be sped up by starting the search from the following values:
+```
+branching_values=[
+[27644437,35742549198872617291353508656626642567,359334085968622831041960188598043661065388726959079837],#prune 877
+[1046527, 16769023, 1073676287],#prune 16127
+[87178291199, 479001599, 39916801],#prune 5039
+[433494437, 2971215073, 28657, 514229],
+[131071, 2147483647, 524287],#prune 8191
+[786433, 746497, 995329, 839809],
+[9901],#prune all but 333667
+]
+```
+which lead to 1296 points, precompute all possible 2^15 small sums, then brute force over 2^25 values using only point addition (faster than multiplication),
+ using cairo-rs and parallelization,
+the result can be obtained in one hour.
+
+The greatest speed up is obtained using the `baby-step, giant-step` method, which is a [meet in the middle attack](https://en.wikipedia.org/wiki/Meet-in-the-middle_attack), adapted to
+DLP. The idea is to split the search space in two. To simplify, imagine looking for a target sum C, instead of computing 2^34 values, proceed as follow:
+- compute 2^17 sum value_i in a subset `A`
+- compute 2^17 values in a subset `B` and store the subset `B'`, where `B'_j=(target-value_j)`
+- sort both subsets in log(2^17).
+- search a collision between `A` and `B'`.
+- the solution is the preimage in `A` and `B`.
+
+Note that using the branching values instead of a balanced split improve the computations.
+With BS and optimizations, the attack takes less than 10 minutes with a single core python implementation.
+
+(NDLR: blast is a dna search algorithm)
+
 ## account-obstruction
 
 ![account-obstruction](/screenshots/challenges/account-obstruction.png?raw=true "account-obstruction")
