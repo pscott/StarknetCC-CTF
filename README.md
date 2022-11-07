@@ -114,7 +114,17 @@ So let's try and call `bid` with... let's say Uint256::MAX? The function `check_
 
 ![first-come-first-served](/screenshots/challenges/first-come-first-served.png?raw=true "first-come-first-served")
 
-TODO
+The code doesn't look to involved. From `chal.py`, it looks like the goal is for the `user_balance` to be bigger than `max_supply`. A quick look at the `claim` function got our cairo senses tingling: the `/` operator!!
+
+![](/screenshots/first-come-first-served.png?raw=true "")
+
+Indeed we know that the `/` operator on prime fields can be a little bit confusing... Proof taken from the [cairo doc itself](https://www.cairo-lang.org/docs/how_cairo_works/cairo_intro.html)!
+
+![](/screenshots/division.png?raw=true "")
+
+We started by playing a bit around by dividing the max supply (`178757362047346148211425280000000`) on the [playground](https://www.cairo-lang.org/playground/). Dividing by 2, 3, 4, 5 doesn't yield anything interesting... We continued and found an odd value when reaching 23. Indeed, when dividing max supply by 23, you get `0x3d37a6f4de9bd3fc8590b21642c8590b216432a71ebd61cd959dc604121642d` which is bigger than max supply!
+
+Since the `_last_claimer` is nothing but a variable that increments on every call, we simply need to claim 22 times (by creating 22 random accounts), and the 23rd time should indeed make the `shared_to_deal` be bigger than max supply! We can then flag! :)
 
 ## access-denied
 
