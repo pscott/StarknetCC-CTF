@@ -140,6 +140,8 @@ Indeed it does! Simple comme bonjour!
 
 ![puzzle-box](/screenshots/challenges/puzzle-box.png?raw=true "puzzle-box")
 
+Due to some technical difficulties (we couldn't connect to the box), we didn't solve it. Feel free to submit a PR! :)
+
 ## unique-id
 
 ![unique-id](/screenshots/challenges/unique-id.png?raw=true "unique-id")
